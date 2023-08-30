@@ -10,6 +10,7 @@ import PostDetails, {
 import EditPost from "./pages/EditPost";
 import Error from "./pages/Error";
 import { action as formAction } from "./components/PostForm";
+import Auth from "./pages/Auth";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
                 path: "/create",
                 element: <CreatePost />,
                 action: formAction,
+            },
+            {
+                path: "/auth",
+                element: <Auth />,
             },
             {
                 path: "/:id",

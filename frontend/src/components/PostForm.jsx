@@ -10,7 +10,7 @@ const PostForm = ({ formName, btnText, oldData, method }) => {
             className="w-1/3 grid grid-cols-1 mx-auto pt-14 gap-y-5 text-lg"
         >
             <div>
-                <h1 className="font-bold text-xl">{formName}</h1>
+                <h1 className="font-bold text-2xl">{formName}</h1>
             </div>
             <div className="grid gap-y-1">
                 <label htmlFor="title">Title</label>
