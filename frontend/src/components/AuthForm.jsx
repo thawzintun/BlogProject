@@ -1,11 +1,16 @@
 import React from "react";
-import { Form, Link, useActionData, useSearchParams } from "react-router-dom";
+import {
+    Form,
+    Link,
+    redirect,
+    useActionData,
+    useSearchParams,
+} from "react-router-dom";
 
 const AuthForm = () => {
     const actionData = useActionData();
     const [seachParams] = useSearchParams();
     const isLogin = seachParams.has("login");
-    console.log(isLogin);
     return (
         <Form
             method="POST"
@@ -74,3 +79,43 @@ const AuthForm = () => {
 };
 
 export default AuthForm;
+
+export const action = async ({ request }) => {
+    const searchParams = new URL(request.url).searchParams;
+
+    if (!searchParams.has("login") && !searchParams.has("signup")) {
+        throw new Error("");
+    }
+
+    let url = `http://localhost:8080/login`;
+
+    const isLogin = searchParams.has("login");
+
+    if (!isLogin) {
+        url = `http://localhost:8080/signup`;
+    }
+
+    const data = await request.formData();
+
+    const authData = {
+        email: data.get("email"),
+        password: data.get("password"),
+    };
+
+    const response = await fetch(url, {
+        method: request.method,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(authData),
+    });
+
+    if (!response.ok) {
+        throw new Error("");
+    }
+
+    const resData = await response.json();
+    const token = resData.token;
+    localStorage.setItem("token", token);
+    return redirect("/");
+};
