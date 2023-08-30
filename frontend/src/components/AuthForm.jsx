@@ -19,6 +19,12 @@ const AuthForm = () => {
             <div>
                 <h1 className="font-bold text-2xl">
                     {isLogin ? "Login to your account" : "Create a new account"}
+                    {actionData && actionData.message && (
+                        <p className="text-sm text-red-500">
+                            {actionData.message &&
+                                Object.values(actionData.message)}
+                        </p>
+                    )}
                 </h1>
             </div>
             <div className="grid gap-y-1">
@@ -109,6 +115,10 @@ export const action = async ({ request }) => {
         },
         body: JSON.stringify(authData),
     });
+
+    if (response.status === 422 || response.status === 401) {
+        return response;
+    }
 
     if (!response.ok) {
         throw new Error("");
