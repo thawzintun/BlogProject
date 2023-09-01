@@ -102,12 +102,12 @@ export default AuthForm;
 export const action = async ({ request }) => {
     const searchParams = new URL(request.url).searchParams;
 
-    let url = `http://localhost:8080/login`;
+    let url = `${process.env.REACT_APP_DOMAIN}/login`;
 
     const isSignup = searchParams.has("signup");
 
     if (isSignup) {
-        url = `http://localhost:8080/signup`;
+        url = `${process.env.REACT_APP_DOMAIN}/signup`;
     }
 
     const data = await request.formData();

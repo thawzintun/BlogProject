@@ -93,7 +93,7 @@ export default PostForm;
 export const action = async ({ request, params }) => {
     const data = await request.formData();
 
-    let url = `http://localhost:8080/posts`;
+    let url = `${process.env.REACT_APP_DOMAIN}/posts`;
 
     const token = getToken();
 
@@ -106,7 +106,7 @@ export const action = async ({ request, params }) => {
     };
 
     if (request.method === "PATCH") {
-        url = `http://localhost:8080/posts/${params.id}`;
+        url = `${process.env.REACT_APP_DOMAIN}/posts/${params.id}`;
     }
     const response = await fetch(url, {
         method: request.method,

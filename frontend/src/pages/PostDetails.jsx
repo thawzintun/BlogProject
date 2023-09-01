@@ -61,7 +61,9 @@ const PostDetails = () => {
 export default PostDetails;
 
 export const loader = async ({ params }) => {
-    const response = await fetch(`http://localhost:8080/posts/${params.id}`);
+    const response = await fetch(
+        `${process.env.REACT_APP_DOMAIN}/posts/${params.id}`
+    );
     const data = await response.json();
     if (!response.ok) {
         throw new Error("");
@@ -72,13 +74,16 @@ export const loader = async ({ params }) => {
 
 export const action = async ({ params }) => {
     const token = getToken();
-    const response = await fetch(`http://localhost:8080/posts/${params.id}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-        },
-    });
+    const response = await fetch(
+        `${process.env.REACT_APP_DOMAIN}/posts/${params.id}`,
+        {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+            },
+        }
+    );
 
     if (!response.ok) {
         throw Error("");
