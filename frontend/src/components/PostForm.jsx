@@ -1,10 +1,11 @@
 import React from "react";
-import { Form, redirect, useActionData } from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import uuid from "react-uuid";
 import { getToken } from "../util/auth";
 
 const PostForm = ({ formName, btnText, oldData, method }) => {
     const actionData = useActionData();
+    const { state } = useNavigation();
     return (
         <Form
             method={method}
@@ -80,8 +81,11 @@ const PostForm = ({ formName, btnText, oldData, method }) => {
                 )}
             </div>
             <div className="grid grid-cols-2">
-                <button className="bg-black text-white col-start-2 py-2">
-                    {btnText}
+                <button
+                    className="bg-black text-white col-start-2 py-2 disabled:opacity-50"
+                    disabled={state === "submitting"}
+                >
+                    {state === "submitting" ? "Please Wait..." : btnText}
                 </button>
             </div>
         </Form>
