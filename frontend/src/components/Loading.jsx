@@ -2,12 +2,15 @@ import React from "react";
 
 const Loading = () => {
     return (
-        <div className="lds-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+        <section className="h-screen flex justify-center items-center">
+            <div className="lds-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <span className="text-[#99999]">Please wait</span>
+        </section>
     );
 };
 
