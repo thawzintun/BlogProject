@@ -4,6 +4,7 @@ import {
     Link,
     redirect,
     useActionData,
+    useNavigation,
     useSearchParams,
 } from "react-router-dom";
 
@@ -11,6 +12,9 @@ const AuthForm = () => {
     const actionData = useActionData();
     const [seachParams] = useSearchParams();
     const isLogin = seachParams.has("login");
+    const isSignup = seachParams.has("signup");
+    const navigation = useNavigation();
+    const isSubmitting = navigation.state === "submitting";
     return (
         <Form
             method="POST"
@@ -18,7 +22,9 @@ const AuthForm = () => {
         >
             <div>
                 <h1 className="font-bold text-2xl">
-                    {isLogin ? "Login to your account" : "Create a new account"}
+                    {isLogin || !isSignup
+                        ? "Login to your account"
+                        : "Create a new account"}
                     {actionData && actionData.message && (
                         <p className="text-sm text-red-500">
                             {actionData.message &&
@@ -59,25 +65,32 @@ const AuthForm = () => {
                 )}
             </div>
             <div className="grid">
-                {isLogin ? (
+                {isLogin || !isSignup ? (
                     <p>
-                        Don't have an account?{" "}
+                        Don't have an account?
                         <Link to="/auth?signup" className="text-blue-500">
-                            Create Account
+                            &nbsp;Create Account
                         </Link>
                     </p>
                 ) : (
                     <p>
-                        Already has an account?{" "}
+                        Already have an account?
                         <Link to="/auth?login" className="text-blue-500">
-                            Sign In
+                            &nbsp;Sign In
                         </Link>
                     </p>
                 )}
             </div>
             <div className="grid">
-                <button className="bg-black text-white py-2">
-                    {isLogin ? "Login" : "Sign up"}
+                <button
+                    className="bg-black text-white py-2 disabled:opacity-50"
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting
+                        ? "Please Wait..."
+                        : isLogin || !isSignup
+                        ? "Login"
+                        : "Sign up"}
                 </button>
             </div>
         </Form>
@@ -89,15 +102,11 @@ export default AuthForm;
 export const action = async ({ request }) => {
     const searchParams = new URL(request.url).searchParams;
 
-    if (!searchParams.has("login") && !searchParams.has("signup")) {
-        throw new Error("");
-    }
-
     let url = `http://localhost:8080/login`;
 
-    const isLogin = searchParams.has("login");
+    const isSignup = searchParams.has("signup");
 
-    if (!isLogin) {
+    if (isSignup) {
         url = `http://localhost:8080/signup`;
     }
 
@@ -127,5 +136,9 @@ export const action = async ({ request }) => {
     const resData = await response.json();
     const token = resData.token;
     localStorage.setItem("token", token);
+    const expDate = new Date();
+    expDate.setHours(expDate.getHours() + 1);
+    localStorage.setItem("exp", expDate.toISOString());
+
     return redirect("/");
 };

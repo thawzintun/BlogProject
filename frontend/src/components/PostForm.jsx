@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, redirect, useActionData } from "react-router-dom";
 import uuid from "react-uuid";
+import { getToken } from "../util/auth";
 
 const PostForm = ({ formName, btnText, oldData, method }) => {
     const actionData = useActionData();
@@ -94,6 +95,8 @@ export const action = async ({ request, params }) => {
 
     let url = `http://localhost:8080/posts`;
 
+    const token = getToken();
+
     const postData = {
         id: request.method === "POST" ? uuid() : params.id,
         title: data.get("title"),
@@ -109,6 +112,7 @@ export const action = async ({ request, params }) => {
         method: request.method,
         headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
         },
         body: JSON.stringify(postData),
     });

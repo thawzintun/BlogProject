@@ -12,12 +12,16 @@ import Error from "./pages/Error";
 import { action as formAction } from "./components/PostForm";
 import Auth from "./pages/Auth";
 import { action as authAction } from "./components/AuthForm";
+import { loader as signoutLoader } from "./util/logout";
+import { authRouteToken, checkToken, loader as TokenLoader } from "./util/auth";
 
 const router = createBrowserRouter([
     {
         path: "",
         element: <Main />,
         errorElement: <Error />,
+        id: "root",
+        loader: TokenLoader,
         children: [
             {
                 index: true,
@@ -28,11 +32,17 @@ const router = createBrowserRouter([
                 path: "/create",
                 element: <CreatePost />,
                 action: formAction,
+                loader: checkToken,
             },
             {
                 path: "/auth",
                 element: <Auth />,
                 action: authAction,
+                loader: authRouteToken,
+            },
+            {
+                path: "/logout",
+                loader: signoutLoader,
             },
             {
                 path: "/:id",
@@ -48,6 +58,7 @@ const router = createBrowserRouter([
                         path: "edit",
                         element: <EditPost />,
                         action: formAction,
+                        loader: checkToken,
                     },
                 ],
             },

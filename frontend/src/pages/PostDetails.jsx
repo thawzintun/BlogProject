@@ -6,11 +6,13 @@ import {
     useSubmit,
 } from "react-router-dom";
 import { ArrowLeftIcon, CalendarDaysIcon } from "@heroicons/react/24/solid";
+import { getToken } from "../util/auth";
 
 const PostDetails = () => {
     const data = useRouteLoaderData("post-detail");
     const { id, title, date, image, description } = data.post;
     const submit = useSubmit();
+    const token = useRouteLoaderData("root");
 
     const postDeleteHandler = () => {
         const confirmStatus = window.confirm(
@@ -36,20 +38,22 @@ const PostDetails = () => {
             </p>
             <img src={image} alt={title} />
             <p className=" text-justify py-2 text-slate-600">{description}</p>
-            <div className="flex justify-end gap-x-3">
-                <Link
-                    to={`/${id}/edit`}
-                    className=" px-4 py-2 text-white bg-black"
-                >
-                    Edit
-                </Link>
-                <button
-                    className=" px-4 py-2 text-white bg-black"
-                    onClick={postDeleteHandler}
-                >
-                    Delete
-                </button>
-            </div>
+            {token && (
+                <div className="flex justify-end gap-x-3">
+                    <Link
+                        to={`/${id}/edit`}
+                        className=" px-4 py-2 text-white bg-black"
+                    >
+                        Edit
+                    </Link>
+                    <button
+                        className=" px-4 py-2 text-white bg-black"
+                        onClick={postDeleteHandler}
+                    >
+                        Delete
+                    </button>
+                </div>
+            )}
         </section>
     );
 };
@@ -67,8 +71,13 @@ export const loader = async ({ params }) => {
 };
 
 export const action = async ({ params }) => {
+    const token = getToken();
     const response = await fetch(`http://localhost:8080/posts/${params.id}`, {
         method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+        },
     });
 
     if (!response.ok) {
