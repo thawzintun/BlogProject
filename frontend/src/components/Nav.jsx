@@ -1,8 +1,21 @@
 import React from "react";
-import { Link, NavLink, useRouteLoaderData } from "react-router-dom";
+import {
+    Link,
+    NavLink,
+    useNavigate,
+    useRouteLoaderData,
+} from "react-router-dom";
 
 const Nav = () => {
     const token = useRouteLoaderData("root");
+    const navigate = useNavigate();
+    const logoutHandler = () => {
+        const confirmStatus = window.confirm("Are you sure want to logout?");
+
+        if (confirmStatus) {
+            navigate("/logout");
+        }
+    };
     return (
         <nav className="flex justify-between px-20 items-center py-3 m-auto shadow-sm sticky">
             <Link to={"/"} className="text-3xl font-bold">
@@ -30,9 +43,9 @@ const Nav = () => {
                         >
                             Create Post
                         </NavLink>
-                        <NavLink to={"/logout"} className="px-3 py-2">
+                        <button onClick={logoutHandler} className="px-3 py-2">
                             Logout
-                        </NavLink>
+                        </button>
                     </>
                 ) : (
                     <NavLink

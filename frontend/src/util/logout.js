@@ -6,11 +6,7 @@ export const loader = () => {
     if (!token) {
         return redirect("/");
     }
-    const confirmStatus = window.confirm("Are you sure want to logout?");
-    if (confirmStatus) {
-        localStorage.removeItem("token");
-
-        return redirect("/");
-    }
+    localStorage.removeItem("token");
+    localStorage.removeItem("exp");
     return redirect("/");
 };
