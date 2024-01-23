@@ -16,6 +16,6 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 });
 
-app.listen(8080, function () {
+app.listen(3000, function () {
     console.log("Your app is listening");
 });
