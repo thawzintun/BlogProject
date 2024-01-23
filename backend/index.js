@@ -1,6 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
+const port = process.env.PORT || 4000;
+
 const eventRoutes = require("./routes/posts");
 const authRoutes = require("./routes/auth");
 
@@ -16,6 +18,6 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 });
 
-app.listen(3000, function () {
-    console.log("Your app is listening");
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
 });
