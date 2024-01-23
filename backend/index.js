@@ -19,4 +19,6 @@ app.use(authRoutes);
 
 app.use("/posts", eventRoutes);
 
-app.listen(8080);
+app.listen(8080, function () {
+    console.log("Your app is listening on port " + port);
+});
